@@ -8,3 +8,5 @@ version '0.1.0'
 issues_url 'https://github.com/mhedgpeth/cafe-cookbook/issues'
 source_url 'https://github.com/mhedgpeth/cafe-cookbook'
 
+depends 'vcruntime'
+depends 'windows'

@@ -1,33 +1,25 @@
 ---
 driver:
-  name: vagrant
+  name: azurerm
 
-## The forwarded_port port feature lets you connect to ports on the VM guest via
-## localhost on the host.
-## see also: https://docs.vagrantup.com/v2/networking/forwarded_ports.html
-
-#  network:
-#    - ["forwarded_port", {guest: 80, host: 8080}]
+driver_config:
+  subscription_id: <%= ENV['AZURE_SUBSCRIPTION_ID'] %>
+  location: 'South Central US'
+  machine_size: 'Standard_D1'
 
 provisioner:
-  name: policyfile_zero
-
-## require_chef_omnibus specifies a specific chef version to install. You can
-## also set this to `true` to always use the latest version.
-## see also: https://docs.chef.io/config_yml_kitchen.html
-
-#  require_chef_omnibus: 12.8.1
+  name: chef_zero
 
 verifier:
   name: inspec
 
 platforms:
-  - name: ubuntu-16.04
-  - name: centos-7.2
+  - name: windows2012-r2
+    driver_config:
+      image_urn: MicrosoftWindowsServer:WindowsServer:2012-R2-Datacenter:latest
+    transport:
+      name: winrm
 
 suites:
   - name: default
-    verifier:
-      inspec_tests:
-        - test/smoke/default
     attributes:
