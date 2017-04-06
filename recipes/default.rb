@@ -8,12 +8,30 @@ include_recipe 'vcruntime::vc14'
 
 cafe_version = '0.5.3.0'
 cafe_github_version = 'v0.5.3-beta'
-cafe_archive = "cafe-win8-x64-#{cafe_version}.zip"
+
+platform_version = node['platform_version']
+cafe_platform = if platform_version.start_with? '6.1'
+                  'win7'
+                elsif platform_version.start_with? '6.3'
+                  'win8'
+                else
+                  'win10'
+                end
+Chef::Log.info "Expecting cafe to run on platform: #{cafe_platform}"
+
+cafe_archive = "cafe-#{cafe_platform}-x64-#{cafe_version}.zip"
 cafe_install_directory = 'C:/cafe'
-cafe_archive_cached = "#{Chef::Config['file_cache_path']}/#{cafe_archive}"
+cafe_cache_directory = "#{Chef::Config['file_cache_path']}/cafe"
+cafe_archive_cached = "#{cafe_cache_directory}/#{cafe_archive}"
+
+directory 'cafe cache directory' do
+  path cafe_cache_directory
+end
 
 remote_file cafe_archive_cached do
   source "https://github.com/mhedgpeth/cafe/releases/download/#{cafe_github_version}/#{cafe_archive}"
+  notifies :delete, 'directory[cafe cache directory]', :before
+  notifies :create, 'directory[cafe cache directory]', :before
   notifies :unzip, 'windows_zipfile[unzip cafe]', :immediately
   notifies :run, 'execute[initialize cafe]', :immediately
   notifies :run, 'execute[register cafe]', :immediately
