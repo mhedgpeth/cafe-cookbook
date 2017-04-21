@@ -6,8 +6,8 @@
 
 include_recipe 'vcruntime::vc14'
 
-cafe_version = '0.5.3.0'
-cafe_github_version = 'v0.5.3-beta'
+cafe_version = node['cafe']['version']
+cafe_github_version = node['cafe']['version_github']
 
 platform_version = node['platform_version']
 cafe_platform = if platform_version.start_with? '6.1'
@@ -61,8 +61,8 @@ end
 template "#{cafe_install_directory}/server.json" do
   source 'server.json.erb'
   variables(
-    chef_interval: node['cafe']['chef_interval']
-    port: node['cafe']['port']
+    chef_interval: node['cafe']['chef_interval'],
+    port: node['cafe']['port'],
     install_root: install_root
   )
   notifies :restart, 'service[cafe]', :immediately
