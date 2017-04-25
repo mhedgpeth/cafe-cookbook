@@ -9,7 +9,7 @@ describe package('Microsoft Visual C++ 2015 x64 Minimum Runtime - 14.0.24215') d
   it { should be_installed }
 end
 
-describe file('C:/cafe/cafe.exe') do 
+describe file('C:/cafe/cafe.exe') do
   it { should exist }
 end
 

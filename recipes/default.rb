@@ -44,7 +44,7 @@ service 'stop cafe' do
   action :nothing
   service_name 'cafe'
   guard_interpreter :powershell_script
-  only_if "!!(Get-Service -Name \"cafe\" -ErrorAction SilentlyContinue)"
+  only_if '!!(Get-Service -Name "cafe" -ErrorAction SilentlyContinue)'
 end
 
 directory cafe_install_directory
@@ -78,5 +78,5 @@ template "#{cafe_install_directory}/server.json" do
 end
 
 service 'cafe' do
-    action :start
+  action :start
 end
