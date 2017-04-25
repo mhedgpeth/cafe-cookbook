@@ -65,6 +65,8 @@ execute 'register cafe' do
   command 'cafe service register'
   cwd cafe_install_directory
   action :nothing
+  guard_interpreter :powershell_script
+  only_if '!(Get-Service -Name "cafe" -ErrorAction SilentlyContinue)'
 end
 
 template "#{cafe_install_directory}/server.json" do
