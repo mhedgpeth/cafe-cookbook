@@ -4,7 +4,7 @@ maintainer_email 'mhedgpeth@gmail.com'
 license 'all_rights'
 description 'Installs/Configures cafe'
 long_description 'Installs/Configures cafe'
-version '0.2.0'
+version '0.3.1'
 issues_url 'https://github.com/mhedgpeth/cafe-cookbook/issues'
 source_url 'https://github.com/mhedgpeth/cafe-cookbook'
 

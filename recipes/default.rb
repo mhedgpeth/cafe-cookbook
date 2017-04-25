@@ -26,6 +26,7 @@ cafe_cache_directory = "#{Chef::Config['file_cache_path']}/cafe"
 cafe_archive_cached = "#{cafe_cache_directory}/#{cafe_archive}"
 
 directory 'cafe cache directory' do
+  recursive true
   path cafe_cache_directory
 end
 
@@ -33,9 +34,17 @@ remote_file cafe_archive_cached do
   source "https://github.com/mhedgpeth/cafe/releases/download/#{cafe_github_version}/#{cafe_archive}"
   notifies :delete, 'directory[cafe cache directory]', :before
   notifies :create, 'directory[cafe cache directory]', :before
+  notifies :stop, 'service[stop cafe]', :before
   notifies :unzip, 'windows_zipfile[unzip cafe]', :immediately
   notifies :run, 'execute[initialize cafe]', :immediately
   notifies :run, 'execute[register cafe]', :immediately
+end
+
+service 'stop cafe' do
+  action :nothing
+  service_name 'cafe'
+  guard_interpreter :powershell_script
+  only_if "!!(Get-Service -Name \"cafe\" -ErrorAction SilentlyContinue)"
 end
 
 directory cafe_install_directory
