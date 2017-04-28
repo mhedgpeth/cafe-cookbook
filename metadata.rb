@@ -1,7 +1,7 @@
 name 'cafe'
 maintainer 'Michael Hedgpeth'
 maintainer_email 'mhedgpeth@gmail.com'
-license 'all_rights'
+license 'Apache-2.0'
 description 'Installs/Configures cafe'
 long_description 'Installs/Configures cafe'
 version '0.3.2'
@@ -10,3 +10,4 @@ source_url 'https://github.com/mhedgpeth/cafe-cookbook'
 
 depends 'vcruntime'
 depends 'windows'
+supports 'windows'
