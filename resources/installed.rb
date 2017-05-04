@@ -17,6 +17,7 @@ action :install do
   is_installed = ::File.exist? '{cafe_install_location}/cafe.exe'
 
   if is_installed
+    Chef::Log.info 'Chef is already installed, so upgrading it through the chef.Updater'
     remote_file "#{cafe_install_location}/staging/#{installer}" do
       source download_source
       checksum download_checksum
@@ -68,7 +69,16 @@ action :install do
       guard_interpreter :powershell_script
       only_if '!(Get-Service -Name "cafe" -ErrorAction SilentlyContinue)'
     end
+
   end
+
+  execute 'register cafe.Updater' do
+    command 'cafe.Updater service register'
+    cwd "#{cafe_install_location}/updater"
+    guard_interpreter :powershell_script
+    only_if '!(Get-Service -Name "cafe.Updater" -ErrorAction SilentlyContinue)'
+  end
+
 
   template "#{cafe_install_location}/server.json" do
     source 'server.json.erb'
@@ -83,7 +93,7 @@ action :install do
     action :start
   end
 
-  # service 'cafe.Updater' do
-  #   action :start
-  # end
+  service 'cafe.Updater' do
+    action :start
+  end
 end
