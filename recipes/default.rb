@@ -20,10 +20,10 @@ Chef::Log.info "Expecting cafe to run on platform: #{cafe_platform}"
 cafe_archive = "cafe-#{cafe_platform}-x64-#{cafe_version}.zip"
 install_root = node['cafe']['install_root']
 
-download_source = "https://github.com/mhedgpeth/cafe/releases/download/#{cafe_github_version}/#{installer}"
+source = "https://github.com/mhedgpeth/cafe/releases/download/#{cafe_github_version}/#{cafe_archive}"
 
 cafe_installed 'cafe' do
-  download_source download_source
+  download_source source
   version cafe_version
   installer cafe_archive
   cafe_install_root install_root

@@ -1,6 +1,7 @@
-resource_name :installed
+resource_name :cafe_installed
 
-property :download_source, String, required: true, name_property: true
+property :download_source, String, required: true
+property :download_checksum, String, required: false
 property :version, String, required: true
 property :installer, String, required: true
 property :cafe_install_root, String, default: 'C:'
@@ -12,11 +13,22 @@ default_action :install
 action :install do
   include_recipe 'vcruntime::vc14'
 
-  cafe_install_location = "#{install_root}/cafe"
-  cafe_installed = File.exist? '{cafe_install_location}/cafe.exe'
+  cafe_install_location = "#{cafe_install_root}/cafe"
+  is_installed = ::File.exist? '{cafe_install_location}/cafe.exe'
 
-  if cafe_installed
+  if is_installed
+    remote_file "#{cafe_install_location}/staging/#{installer}" do
+      source download_source
+      checksum download_checksum
+      notifies :run, 'execute[upgrade cafe]', :delayed
+    end
 
+    execute 'upgrade cafe' do
+      action :nothing
+      cwd cafe_install_location
+      command "cafe upgrade version: #{version}"
+      not_if "cafe version? #{version}"
+    end
   else
     cafe_cache_directory = "#{Chef::Config['file_cache_path']}/cafe"
     cafe_archive_cached = "#{cafe_cache_directory}/#{installer}"
@@ -27,6 +39,7 @@ action :install do
 
     remote_file cafe_archive_cached do
       source download_source
+      checksum download_checksum
       notifies :delete, 'directory[cafe cache directory]', :before
       notifies :create, 'directory[cafe cache directory]', :before
       notifies :unzip, 'windows_zipfile[unzip cafe]', :immediately
@@ -61,8 +74,8 @@ action :install do
     source 'server.json.erb'
     variables(
       chef_interval: chef_interval,
-      port: service_port2,
-      install_root: install_root
+      port: service_port,
+      install_root: cafe_install_root
     )
   end
 
@@ -70,7 +83,7 @@ action :install do
     action :start
   end
 
-  service 'cafe.Updater' do
-    action :start
-  end
+  # service 'cafe.Updater' do
+  #   action :start
+  # end
 end
