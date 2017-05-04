@@ -10,7 +10,8 @@ name 'cafe'
 default_source :supermarket
 
 # run_list: chef-client will run these recipes in the order specified.
-run_list 'cafe::default'
+run_list 'recipe[cafe::default]', 'recipe[cafe-test::default]'
 
 # Specify a custom source for a single cookbook:
 cookbook 'cafe', path: '.'
+cookbook 'cafe-test', path: 'test/cookbooks/cafe-test'

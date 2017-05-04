@@ -1,0 +1,29 @@
+---
+driver:
+  name: vagrant
+  provider: hyperv
+
+provisioner:
+  name: chef_zero
+
+transport:
+  name: winrm
+  elevated: true
+
+verifier:
+  name: inspec
+
+platforms:
+  - name: windows2012-r2
+    driver_config:
+      box: mwrock/Windows2012R2
+  - name: windows2016
+    driver_config:
+      box: mwrock/Windows2016
+    transport:
+      name: winrm
+
+suites:
+  - name: default
+    policyfile_path: 'Policyfile.rb'
+    attributes:

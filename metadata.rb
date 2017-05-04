@@ -4,10 +4,11 @@ maintainer_email 'mhedgpeth@gmail.com'
 license 'Apache-2.0'
 description 'Installs/Configures cafe'
 long_description 'Installs/Configures cafe'
-version '0.3.2'
 issues_url 'https://github.com/mhedgpeth/cafe-cookbook/issues'
 source_url 'https://github.com/mhedgpeth/cafe-cookbook'
+version '1.1.0'
+
+supports 'windows'
 
 depends 'vcruntime'
 depends 'windows'
-supports 'windows'

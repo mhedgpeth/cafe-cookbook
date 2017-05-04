@@ -4,8 +4,6 @@
 #
 # Copyright:: 2017, The Authors, All Rights Reserved.
 
-include_recipe 'vcruntime::vc14'
-
 cafe_version = node['cafe']['version']
 cafe_github_version = node['cafe']['version_github']
 
@@ -21,64 +19,14 @@ Chef::Log.info "Expecting cafe to run on platform: #{cafe_platform}"
 
 cafe_archive = "cafe-#{cafe_platform}-x64-#{cafe_version}.zip"
 install_root = node['cafe']['install_root']
-cafe_install_directory = "#{install_root}/cafe"
-cafe_cache_directory = "#{Chef::Config['file_cache_path']}/cafe"
-cafe_archive_cached = "#{cafe_cache_directory}/#{cafe_archive}"
 
-directory 'cafe cache directory' do
-  recursive true
-  path cafe_cache_directory
-end
+source = "https://github.com/mhedgpeth/cafe/releases/download/#{cafe_github_version}/#{cafe_archive}"
 
-remote_file cafe_archive_cached do
-  source "https://github.com/mhedgpeth/cafe/releases/download/#{cafe_github_version}/#{cafe_archive}"
-  notifies :delete, 'directory[cafe cache directory]', :before
-  notifies :create, 'directory[cafe cache directory]', :before
-  notifies :stop, 'service[stop cafe]', :before
-  notifies :unzip, 'windows_zipfile[unzip cafe]', :immediately
-  notifies :run, 'execute[initialize cafe]', :immediately
-  notifies :run, 'execute[register cafe]', :immediately
-end
-
-service 'stop cafe' do
-  action :nothing
-  service_name 'cafe'
-  guard_interpreter :powershell_script
-  only_if '!!(Get-Service -Name "cafe" -ErrorAction SilentlyContinue)'
-end
-
-directory cafe_install_directory
-
-windows_zipfile 'unzip cafe' do
-  path cafe_install_directory
-  source cafe_archive_cached
-  action :nothing
-end
-
-execute 'initialize cafe' do
-  command 'cafe init'
-  cwd cafe_install_directory
-  action :nothing
-end
-
-execute 'register cafe' do
-  command 'cafe service register'
-  cwd cafe_install_directory
-  action :nothing
-  guard_interpreter :powershell_script
-  only_if '!(Get-Service -Name "cafe" -ErrorAction SilentlyContinue)'
-end
-
-template "#{cafe_install_directory}/server.json" do
-  source 'server.json.erb'
-  variables(
-    chef_interval: node['cafe']['chef_interval'],
-    port: node['cafe']['port'],
-    install_root: install_root
-  )
-  notifies :restart, 'service[cafe]', :immediately
-end
-
-service 'cafe' do
-  action :start
+cafe_installed 'cafe' do
+  download_source source
+  version cafe_version
+  installer cafe_archive
+  cafe_install_root install_root
+  chef_interval node['cafe']['chef_interval']
+  service_port node['cafe']['port']
 end
