@@ -1,4 +1,4 @@
-task default: [:clean, :style, :test, :publish]
+task default: [:clean, :style, :test, :release]
 desc 'Removes any policy lock files present, berks lockfile, etc.'
 task :clean do
   %w(
