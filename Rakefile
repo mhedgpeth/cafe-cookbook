@@ -1,4 +1,4 @@
-task default: [:clean, :style, :test, :release]
+task default: [:clean, :style, :test]
 desc 'Removes any policy lock files present, berks lockfile, etc.'
 task :clean do
   %w(
@@ -51,9 +51,6 @@ end
 desc 'Run unit and functional tests'
 task test: 'test:all'
 namespace :test do
-  task :berks_install do
-    sh 'chef exec berks install'
-  end
   begin
     require 'rspec/core/rake_task'
     desc 'Run ChefSpec unit tests'
@@ -77,7 +74,7 @@ namespace :test do
       sh 'kitchen destroy'
     end
   end
-  task all: ['test:berks_install', 'test:unit', 'test:kitchen:all']
+  task all: ['test:unit', 'test:kitchen:all']
 end
 desc 'bumps the patch version and releases the cookbook to the supermarket'
 task release: 'release:all'

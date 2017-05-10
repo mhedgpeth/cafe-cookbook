@@ -14,10 +14,11 @@ action :install do
   include_recipe 'vcruntime::vc14'
 
   cafe_install_location = "#{cafe_install_root}/cafe"
-  is_installed = ::File.exist? '{cafe_install_location}/cafe.exe'
+  cafe_executable = "#{cafe_install_location}/cafe.exe"
+  is_installed = ::File.exist? cafe_executable
 
   if is_installed
-    Chef::Log.info 'Chef is already installed, so upgrading it through the chef.Updater'
+    Chef::Log.info 'Cafe is already installed, so upgrading it through the cafe.Updater'
     remote_file "#{cafe_install_location}/staging/#{installer}" do
       source download_source
       checksum download_checksum
@@ -31,6 +32,7 @@ action :install do
       not_if "cafe version? #{version}"
     end
   else
+    Chef::Log.info "Cafe is not installed at #{cafe_executable}, so installing it for the first time"
     cafe_cache_directory = "#{Chef::Config['file_cache_path']}/cafe"
     cafe_archive_cached = "#{cafe_cache_directory}/#{installer}"
     directory 'cafe cache directory' do
@@ -78,7 +80,6 @@ action :install do
     guard_interpreter :powershell_script
     only_if '!(Get-Service -Name "cafe.Updater" -ErrorAction SilentlyContinue)'
   end
-
 
   template "#{cafe_install_location}/server.json" do
     source 'server.json.erb'

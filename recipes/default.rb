@@ -8,16 +8,10 @@ cafe_version = node['cafe']['version']
 cafe_github_version = node['cafe']['version_github']
 
 platform_version = node['platform_version']
-cafe_platform = if platform_version.start_with? '6.1'
-                  'win7'
-                elsif platform_version.start_with? '6.3'
-                  'win8'
-                else
-                  'win10'
-                end
+cafe_platform = ::CafeSettings.runtime_identifier(platform_version)
 Chef::Log.info "Expecting cafe to run on platform: #{cafe_platform}"
 
-cafe_archive = "cafe-#{cafe_platform}-x64-#{cafe_version}.zip"
+cafe_archive = ::CafeSettings.cafe_archive(cafe_platform, cafe_version)
 install_root = node['cafe']['install_root']
 
 source = "https://github.com/mhedgpeth/cafe/releases/download/#{cafe_github_version}/#{cafe_archive}"
