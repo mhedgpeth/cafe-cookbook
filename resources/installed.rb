@@ -19,7 +19,14 @@ action :install do
 
   if is_installed
     Chef::Log.info 'Cafe is already installed, so upgrading it through the cafe.Updater'
-    remote_file "#{cafe_install_location}/staging/#{installer}" do
+    
+    staging_directory = "#{cafe_install_location}/staging"
+
+    directory staging_directory do
+      recursive true
+    end
+
+    remote_file "#{staging_directory}/#{installer}" do
       source download_source
       checksum download_checksum
       notifies :run, 'execute[upgrade cafe]', :delayed
