@@ -35,7 +35,7 @@ action :install do
     execute 'upgrade cafe' do
       action :nothing
       cwd cafe_install_location
-      command "cafe upgrade version: #{version}"
+      command "cafe install version: #{version} on: localhost return: immediately"
       not_if "cafe version? #{version}"
     end
   else
