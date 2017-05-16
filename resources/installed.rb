@@ -50,7 +50,9 @@ action :install do
       notifies :run, 'execute[register cafe]', :immediately
     end
 
-    directory cafe_install_location
+    directory cafe_install_location do
+      recursive true
+    end
 
     windows_zipfile 'unzip cafe' do
       path cafe_install_location
