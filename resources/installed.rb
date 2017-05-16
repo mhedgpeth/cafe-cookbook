@@ -92,6 +92,7 @@ action :install do
 
   template "#{cafe_install_location}/server.json" do
     source 'server.json.erb'
+    cookbook 'cafe'
     variables(
       chef_interval: chef_interval,
       port: service_port,
