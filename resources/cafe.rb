@@ -1,4 +1,4 @@
-resource_name :cafe_installed
+resource_name :cafe
 
 property :download_source, String, required: true
 property :download_checksum, String, required: false
@@ -19,7 +19,7 @@ action :install do
 
   if is_installed
     Chef::Log.info 'Cafe is already installed, so upgrading it through the cafe.Updater'
-    
+
     staging_directory = "#{cafe_install_location}/staging"
 
     directory staging_directory do

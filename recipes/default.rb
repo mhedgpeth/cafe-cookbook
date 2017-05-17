@@ -16,7 +16,7 @@ install_root = node['cafe']['install_root']
 
 source = "https://github.com/mhedgpeth/cafe/releases/download/#{cafe_github_version}/#{cafe_archive}"
 
-cafe_installed 'cafe' do
+cafe 'cafe' do
   download_source source
   version cafe_version
   installer cafe_archive

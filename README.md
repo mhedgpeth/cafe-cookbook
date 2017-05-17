@@ -20,31 +20,22 @@ The attributes that are important are all under the `cafe` subheading:
 
 # Resources
 
-## `cafe_chef_staged`
+## `cafe_chef`
 
-You'll also want to keep the chef application up to date and consistent on all of your nodes. You'll want to make sure you do this when chef is not running as well. Fortunately, `cafe` has you covered in this regard. The first thing you'll want to do is stage the chef installation with `cafe`:
+You'll also want to keep the chef application up to date and consistent on all of your nodes. You'll want to make sure you do this when chef is not running as well. Fortunately, `cafe` has you covered in this regard. You'll want to stage and install the chef installation with `cafe`:
 
 ```ruby
-cafe_chef_staged 'chef-client staged for 13.0.118' do
+cafe_chef 'chef-client staged for 13.0.118' do
+  action :stage, :install
   source 'https://packages.chef.io/files/stable/chef/13.0.118/windows/2012r2/chef-client-13.0.118-1-x64.msi'
   installer 'chef-client-13.0.118-1-x64.msi'
   checksum 'c594965648e20a2339d6f33d236b4e3e22b2be6916cceb1b0f338c74378c03da'
+  version '13.0.118'
   cafe_install_location 'D:/cafe'
 end
 ```
 
 As with the scenario above, you can use any source you want from a private repository. This is the equivalent of running `cafe chef download 13.0.118` but gives you more control to download the file.
-
-## `cafe_chef_installed`
-
-Once you have staged the chef installation, it's time to say that you want it to be installed. You'll do this with the `cafe_chef_installed` resource:
-
-```ruby
-cafe_chef_installed 'chef-client 13.0.118' do
-  version '13.0.118'
-  cafe_install_location 'D:/cafe'
-end
-```
  
 You can omit the `cafe_install_location` if it is in the default `C:/cafe` location.
 
