@@ -10,11 +10,17 @@ property :service_port, Integer, default: 59320
 
 default_action :install
 
+def cafe_install_location
+  "#{cafe_install_root}/cafe"
+end
+
+def cafe_executable
+  "#{cafe_install_location}/cafe.exe"
+end
+
 action :install do
   include_recipe 'vcruntime::vc14'
 
-  cafe_install_location = "#{cafe_install_root}/cafe"
-  cafe_executable = "#{cafe_install_location}/cafe.exe"
   is_installed = ::File.exist? cafe_executable
 
   if is_installed
@@ -106,5 +112,26 @@ action :install do
 
   service 'cafe.Updater' do
     action :start
+  end
+end
+
+action :disable do
+  execute 'uninstall cafe service' do
+    command "#{cafe_executable} service unregister"
+    cwd cafe_install_location
+    guard_interpreter :powershell_script
+    only_if 'Get-Service -Name "cafe" -ErrorAction SilentlyContinue'
+  end
+
+  execute 'unregister cafe.Updater' do
+    command 'cafe.Updater service unregister'
+    cwd "#{cafe_install_location}/updater"
+    guard_interpreter :powershell_script
+    only_if 'Get-Service -Name "cafe.Updater" -ErrorAction SilentlyContinue'
+  end
+
+  directory cafe_install_location do
+    action :delete
+    recursive true
   end
 end

@@ -27,3 +27,6 @@ suites:
   - name: default
     policyfile_path: 'Policyfile.rb'
     attributes:
+  - name: remove
+    provisioner:
+      policyfile_path: Policyfile-remove.rb
