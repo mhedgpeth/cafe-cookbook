@@ -1,0 +1,140 @@
+{
+  "revision_id": "00feeea17af255df5cc7b6abc68bd3968e81092447111897a81a00eeadf3ffbe",
+  "name": "cafe",
+  "run_list": [
+    "recipe[cafe::default]",
+    "recipe[cafe-test::remove_cafe]"
+  ],
+  "cookbook_locks": {
+    "cafe": {
+      "version": "2.1.0",
+      "identifier": "d67d1d9380e4e381cac97a920b9a4506c20d674d",
+      "dotted_decimal_identifier": "60373210998301923.36533238689303450.75895327778637",
+      "source": ".",
+      "cache_key": null,
+      "scm_info": {
+        "scm": "git",
+        "remote": "https://github.com/mhedgpeth/cafe-cookbook.git",
+        "revision": "a259058a9062b728b08341afbc267ff934b10c09",
+        "working_tree_clean": false,
+        "published": true,
+        "synchronized_remote_branches": [
+          "origin/feature/cafe-uninstall"
+        ]
+      },
+      "source_options": {
+        "path": "."
+      }
+    },
+    "cafe-test": {
+      "version": "0.1.0",
+      "identifier": "42ce138c73af18df95ef3ae380b49001f09af09d",
+      "dotted_decimal_identifier": "18803931818995480.62933774524186804.158338006053021",
+      "source": "test/cookbooks/cafe-test",
+      "cache_key": null,
+      "scm_info": {
+        "scm": "git",
+        "remote": "https://github.com/mhedgpeth/cafe-cookbook.git",
+        "revision": "a259058a9062b728b08341afbc267ff934b10c09",
+        "working_tree_clean": false,
+        "published": true,
+        "synchronized_remote_branches": [
+          "origin/feature/cafe-uninstall"
+        ]
+      },
+      "source_options": {
+        "path": "test/cookbooks/cafe-test"
+      }
+    },
+    "vcruntime": {
+      "version": "1.0.3",
+      "identifier": "055c40f8a5787f84598eb7dde43c218e670c6c10",
+      "dotted_decimal_identifier": "1508809002809471.37253166430807100.36895497939984",
+      "cache_key": "vcruntime-1.0.3-supermarket.chef.io",
+      "origin": "https://supermarket.chef.io:443/api/v1/cookbooks/vcruntime/versions/1.0.3/download",
+      "source_options": {
+        "artifactserver": "https://supermarket.chef.io:443/api/v1/cookbooks/vcruntime/versions/1.0.3/download",
+        "version": "1.0.3"
+      }
+    },
+    "windows": {
+      "version": "3.1.1",
+      "identifier": "b73725749cc74ff2005c00f6c692a91e3c6b772f",
+      "dotted_decimal_identifier": "51570554747799375.68117339517142674.185947327788847",
+      "cache_key": "windows-3.1.1-supermarket.chef.io",
+      "origin": "https://supermarket.chef.io:443/api/v1/cookbooks/windows/versions/3.1.1/download",
+      "source_options": {
+        "artifactserver": "https://supermarket.chef.io:443/api/v1/cookbooks/windows/versions/3.1.1/download",
+        "version": "3.1.1"
+      }
+    },
+    "ohai": {
+      "version": "5.1.0",
+      "identifier": "0c8f2906d48ae976d03d6eb6c3f39534ea62d795",
+      "dotted_decimal_identifier": "3535106091551465.33443009520911347.164054503184277",
+      "cache_key": "ohai-5.1.0-supermarket.chef.io",
+      "origin": "https://supermarket.chef.io:443/api/v1/cookbooks/ohai/versions/5.1.0/download",
+      "source_options": {
+        "artifactserver": "https://supermarket.chef.io:443/api/v1/cookbooks/ohai/versions/5.1.0/download",
+        "version": "5.1.0"
+      }
+    }
+  },
+  "default_attributes": {
+
+  },
+  "override_attributes": {
+
+  },
+  "solution_dependencies": {
+    "Policyfile": [
+      [
+        "cafe",
+        ">= 0.0.0"
+      ],
+      [
+        "cafe-test",
+        ">= 0.0.0"
+      ],
+      [
+        "vcruntime",
+        "= 1.0.3"
+      ],
+      [
+        "windows",
+        "= 3.1.1"
+      ],
+      [
+        "ohai",
+        "= 5.1.0"
+      ]
+    ],
+    "dependencies": {
+      "vcruntime (1.0.3)": [
+
+      ],
+      "windows (3.1.1)": [
+        [
+          "ohai",
+          ">= 4.0.0"
+        ]
+      ],
+      "ohai (5.1.0)": [
+
+      ],
+      "cafe (2.1.0)": [
+        [
+          "vcruntime",
+          ">= 0.0.0"
+        ],
+        [
+          "windows",
+          ">= 0.0.0"
+        ]
+      ],
+      "cafe-test (0.1.0)": [
+
+      ]
+    }
+  }
+}

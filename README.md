@@ -42,6 +42,8 @@ You should also notice that this resource is very friendly to air-gapped environ
 
 If you are introducing Cafe to existing Chef nodes because you want to manage Chef that way now, and your `cafe_install_root` is set to `D:`, it will dutifully install Cafe for the first time in `D:\chef`. On an upgrade, the `cafe` service asks its `cafe Updater` service friend to update `cafe` for it, because services can't update themselves. This all happens after the Chef run is finished, assuming that Cafe is running Chef.
 
+Also, you can uninstall `cafe` with the `:remove` action.
+
 ## `cafe_chef` resource
 
 You'll also want to keep the `chef-client` application up to date and consistent on all of your nodes. You'll want to make sure you do this when Chef is not running as well. Fortunately, Cafe has you covered in this regard. Simply declare what you want Chef to look like on the machine, and Cafe handles the rest:

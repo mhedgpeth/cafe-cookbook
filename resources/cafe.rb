@@ -1,20 +1,30 @@
 resource_name :cafe
 
-property :download_source, String, required: true
-property :download_checksum, String, required: false
-property :version, String, required: true
-property :installer, String, required: true
+property :download_source, String
+property :download_checksum, String
+property :version, String
+property :installer, String
 property :cafe_install_root, String, default: 'C:'
 property :chef_interval, Integer, default: 1800
 property :service_port, Integer, default: 59320
 
 default_action :install
 
+def cafe_install_location
+  "#{cafe_install_root}/cafe"
+end
+
+def cafe_executable
+  "#{cafe_install_location}/cafe.exe"
+end
+
+def cafe_cached_directory
+  "#{Chef::Config['file_cache_path']}/cafe"
+end
+
 action :install do
   include_recipe 'vcruntime::vc14'
 
-  cafe_install_location = "#{cafe_install_root}/cafe"
-  cafe_executable = "#{cafe_install_location}/cafe.exe"
   is_installed = ::File.exist? cafe_executable
 
   if is_installed
@@ -106,5 +116,43 @@ action :install do
 
   service 'cafe.Updater' do
     action :start
+  end
+end
+
+action :remove do
+  directory cafe_cached_directory do
+    action :delete
+    recursive true
+  end
+
+  service 'cafe' do
+    action :stop
+    guard_interpreter :powershell_script
+    only_if 'Get-Service -Name "cafe" -ErrorAction SilentlyContinue'
+  end
+
+  service 'cafe.Updater' do
+    action :stop
+    guard_interpreter :powershell_script
+    only_if 'Get-Service -Name "cafe.Updater" -ErrorAction SilentlyContinue'
+  end
+
+  execute 'uninstall cafe service' do
+    command "#{cafe_executable} service unregister"
+    cwd cafe_install_location
+    guard_interpreter :powershell_script
+    only_if 'Get-Service -Name "cafe" -ErrorAction SilentlyContinue'
+  end
+
+  execute 'unregister cafe.Updater' do
+    command 'cafe.Updater service unregister'
+    cwd "#{cafe_install_location}/updater"
+    guard_interpreter :powershell_script
+    only_if 'Get-Service -Name "cafe.Updater" -ErrorAction SilentlyContinue'
+  end
+
+  directory cafe_install_location do
+    action :delete
+    recursive true
   end
 end
