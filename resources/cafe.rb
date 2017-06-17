@@ -18,6 +18,14 @@ def cafe_executable
   "#{cafe_install_location}/cafe.exe"
 end
 
+def cafe_updater_install_location
+  "#{cafe_install_location}/updater"
+end
+
+def cafe_updater_executable
+  "#{cafe_updater_install_location}/cafe.Updater.exe"
+end
+
 def cafe_cached_directory
   "#{Chef::Config['file_cache_path']}/cafe"
 end
@@ -94,8 +102,8 @@ action :install do
   end
 
   execute 'register cafe.Updater' do
-    command 'cafe.Updater service register'
-    cwd "#{cafe_install_location}/updater"
+    command "#{cafe_updater_executable} service register"
+    cwd cafe_updater_install_location
     guard_interpreter :powershell_script
     only_if '!(Get-Service -Name "cafe.Updater" -ErrorAction SilentlyContinue)'
   end
@@ -140,15 +148,13 @@ action :remove do
   execute 'uninstall cafe service' do
     command "#{cafe_executable} service unregister"
     cwd cafe_install_location
-    guard_interpreter :powershell_script
-    only_if 'Get-Service -Name "cafe" -ErrorAction SilentlyContinue'
+    only_if { File.exist?(cafe_executable) }
   end
 
   execute 'unregister cafe.Updater' do
-    command 'cafe.Updater service unregister'
-    cwd "#{cafe_install_location}/updater"
-    guard_interpreter :powershell_script
-    only_if 'Get-Service -Name "cafe.Updater" -ErrorAction SilentlyContinue'
+    command "#{cafe_updater_executable} service unregister"
+    cwd cafe_updater_install_location
+    only_if { File.exist?(cafe_updater_executable) }
   end
 
   directory cafe_install_location do
