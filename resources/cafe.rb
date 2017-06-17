@@ -148,13 +148,13 @@ action :remove do
   execute 'uninstall cafe service' do
     command "#{cafe_executable} service unregister"
     cwd cafe_install_location
-    only_if { File.exist?(cafe_executable) }
+    only_if { ::File.exist?(cafe_executable) }
   end
 
   execute 'unregister cafe.Updater' do
     command "#{cafe_updater_executable} service unregister"
     cwd cafe_updater_install_location
-    only_if { File.exist?(cafe_updater_executable) }
+    only_if { ::File.exist?(cafe_updater_executable) }
   end
 
   directory cafe_install_location do
