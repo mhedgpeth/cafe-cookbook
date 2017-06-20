@@ -6,7 +6,7 @@ description 'Installs/Configures cafe'
 long_description 'Installs/Configures cafe'
 issues_url 'https://github.com/mhedgpeth/cafe-cookbook/issues'
 source_url 'https://github.com/mhedgpeth/cafe-cookbook'
-version '2.4.0'
+version '2.5.0'
 
 supports 'windows'
 
